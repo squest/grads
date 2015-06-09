@@ -7,7 +7,9 @@
 (defn save-new-user
   "save user-map in couchbase"
   [user-map]
-  (let [jurusan-map (read-string (slurp "raw-excel/jurusan.edn"))
+  (let [jurusan-map (->> (my-view "jurusan" "show")
+                         (first)
+                         (:jurusan))
         {:keys [name
                 password
                 email
@@ -23,9 +25,9 @@
                          :password    password
                          :email       email
                          :paket       paket
-                         :pilihan-1   [pilihan-1 (get jurusan-map (Integer/parseInt pilihan-1))]
-                         :pilihan-2   [pilihan-2 (get jurusan-map (Integer/parseInt pilihan-2))]
-                         :pilihan-3   [pilihan-3 (get jurusan-map (Integer/parseInt pilihan-3))]
+                         :pilihan-1   [pilihan-1 (get jurusan-map (keyword (str pilihan-1)))]
+                         :pilihan-2   [pilihan-2 (get jurusan-map (keyword (str pilihan-2)))]
+                         :pilihan-3   [pilihan-3 (get jurusan-map (keyword (str pilihan-3)))]
                          :form-status default-status})))
 
 (defn update-user-form-status

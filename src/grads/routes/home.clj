@@ -33,7 +33,7 @@
                                       (do
                                         (user/update-user-form-status user (:params req))
                                         (resp/redirect "/fill-answer"))))
-           (GET "/done" req (unsigned))
+           (GET "/done" req (page/done))
 
            (GET "/kunci" req (page/answer-key-list))
            (GET "/kunci/:kode" req (page/answer-keys-page (:kode (:params req))))
