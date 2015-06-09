@@ -55,10 +55,10 @@
         {:timeout (* 60 30)
          :timeout-response (redirect "/")})
       wrap-formats
+      sess/wrap-noir-session
       (wrap-defaults
         (-> site-defaults
             (assoc-in [:security :anti-forgery] false)
             (assoc-in  [:session :store] (memory-store session/mem))))
-      sess/wrap-noir-session
       wrap-servlet-context
       wrap-internal-error))

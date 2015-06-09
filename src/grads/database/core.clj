@@ -23,7 +23,5 @@
 (defn get-answer-key-list
   []
   (->> (my-view "key" "byPacket")
-       (map :paket)
-       (filter #(not (nil? %)))
-       (sort-by #(Integer/parseInt %))))
+       (map :packetid)))
 

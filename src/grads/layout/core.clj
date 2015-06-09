@@ -135,11 +135,11 @@
                   [:div
                    (form/hidden-field "__anti-forgery-token" *anti-forgery-token*)]
                   [:div
-                   (form/label "packet-id" "kode paket soal")
-                   (form/text-field "packet-id")]
+                   (form/label "packetid" "kode paket soal")
+                   (form/text-field "packetid")]
                   [:div
-                   (form/label "packet-type" "pilih paket")
-                   (form/drop-down "packet-type" ["IPA" "IPS" "TKPA"])]
+                   (form/label "packettype" "pilih paket")
+                   (form/drop-down "packettype" ["IPA" "IPS" "TKPA"])]
                   [:div
                    (form/label "description" "deskripsi")
                    (form/text-field "description")]
@@ -151,9 +151,19 @@
 (defn form-backoffice-update-answer
   [k]
   (let [old-map (bo/get-answer-key-map k)
-        old-answer (:answer old-map)
-        old-packet (:packet-type old-map)
-        old-id (:packet-id old-map)
+        old-answer (->> (:answer old-map)
+                        (vec)
+                        (map (fn [[k v]]
+                               [(->> k
+                                     (str)
+                                     (drop 1)
+                                     (apply str)
+                                     (Integer/parseInt))
+                                v]))
+                        (flatten)
+                        (apply sorted-map))
+        old-packet (:packettype old-map)
+        old-id (:packetid old-map)
         old-desc (:description old-map)
         select-first (cond
                        (= "IPA" old-packet) ["IPA" "TKPA" "IPS"]
@@ -165,14 +175,14 @@
                     [:div
                      (form/hidden-field "__anti-forgery-token" *anti-forgery-token*)]
                     [:div
-                     (form/label "packet-id" "")
-                     (form/hidden-field "packet-id" old-id)]
+                     (form/label "packetid" "")
+                     (form/hidden-field "packetid" old-id)]
                     [:div
                      (form/label "delete" "apakah anda mau menghapus kunci ini ?")
                      (form/drop-down "delete" ["tidak" "ya"])]
                     [:div
-                     (form/label "packet-type" "pilih paket")
-                     (form/drop-down "packet-type" select-first)]
+                     (form/label "packettype" "pilih paket")
+                     (form/drop-down "packettype" select-first)]
                     [:div
                      (form/label "description" "deskripsi")
                      (form/text-field "description" old-desc)]
@@ -180,6 +190,7 @@
                      (form/label "answer" "isi kunci")
                      (form/text-area {:rows 100 :cols 20} "answer" old-answer)]
                     (form/submit-button {:class "button"} "selesai"))]]))
+
 
 ;;all about table
 
@@ -248,9 +259,15 @@
   "generate table of answer key 'k'"
   [k]
   (let [answer-key-map (bo/get-answer-key-map k)
-        packet-id (:packet-id answer-key-map)
+        packetid (:packetid answer-key-map)
         answer-key (->> (:answer answer-key-map)
                         (vec)
+                        (map (fn [[k v]]
+                               [(->> k
+                                     (str)
+                                     (drop 1)
+                                     (apply str)
+                                     Integer/parseInt) v]))
                         (sort-by first))
         answer-table (vec (cons :div (vec (for [[n a] answer-key]
                                             [:tr
@@ -261,7 +278,7 @@
       [:table
        [:tr
         [:td "no paket"]
-        [:td packet-id]
+        [:td packetid]
         answer-table]]]]))
 
 

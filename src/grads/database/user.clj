@@ -28,8 +28,6 @@
                          :pilihan-3   [pilihan-3 (get jurusan-map (Integer/parseInt pilihan-3))]
                          :form-status default-status})))
 
-
-
 (defn update-user-form-status
   [username answer-map]
   (let [{:keys [kode-1

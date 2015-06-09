@@ -59,7 +59,7 @@
                                                   (do
                                                     (backoffice/save-answer-key answer-map)
                                                     (resp/redirect "/backoffice"))
-                                                  (page/back-office))))
+                                                  (resp/redirect "/backoffice"))))
            (GET "/backoffice/update-answer" req (page/backoffice-update-answer))
            (GET "/backoffice/update-answer/:kode" [kode] (page/backoffice-update-answer-k kode))
            (POST "/backoffice/update-answer/:kode" req (let [new-map (:params req)
