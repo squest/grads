@@ -5,7 +5,7 @@
 (defonce db (assoc
               (c.url/url "https://kunci-sbmptn.cloudant.com/" "grader")
               :username "edingtoompamerhingstrart"
-              :password "OccwArJ8dYubAWBAAatsRckI"))
+              :password ""))
 
 (defn my-view
   ([doc view]
